@@ -12,10 +12,18 @@ dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
+compileJava {
+    options.compilerArgs << "-Xlint:unchecked"
+}
+
+compileTestJava {
+    options.compilerArgs << "-Xlint:unchecked"
+}
+
 bootRun.environment([
-        "WELCOME_MESSAGE": "hello"
+    "WELCOME_MESSAGE": "hello"
 ])
 
 test.environment([
-        "WELCOME_MESSAGE": "Hello from test"
+    "WELCOME_MESSAGE": "Hello from test"
 ])
