@@ -14,18 +14,21 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-jdbc")
     compile("org.mariadb.jdbc:mariadb-java-client:2.0.2")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
 def developmentDbUrl = "jdbc:mariadb://localhost:3306/tracker_dev?user=tracker"
 bootRun.environment([
         "WELCOME_MESSAGE": "hello",
+        "MANAGEMENT_SECURITY_ENABLED": false,
         "SPRING_DATASOURCE_URL": developmentDbUrl,
 ])
 
 def testDbUrl = "jdbc:mariadb://localhost:3306/tracker_test?user=tracker"
 test.environment([
         "WELCOME_MESSAGE": "Hello from test",
+        "MANAGEMENT_SECURITY_ENABLED": false,
         "SPRING_DATASOURCE_URL": testDbUrl,
 ])
 
