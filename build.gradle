@@ -27,3 +27,16 @@ bootRun.environment([
 test.environment([
     "WELCOME_MESSAGE": "Hello from test"
 ])
+
+task count << {
+    4.times {
+        print "$it "
+    }
+}
+
+task groovyJDK << {
+    String name = "Marc";
+    name.each() {
+        println "${it}"
+    }
+}
