@@ -1,6 +1,9 @@
+import org.flywaydb.gradle.task.FlywayMigrateTask
+
 plugins {
     id "java"
     id "org.springframework.boot" version "1.5.4.RELEASE"
+    id "org.flywaydb.flyway" version "4.2.0"
 }
 
 repositories {
@@ -9,34 +12,30 @@ repositories {
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-jdbc")
+    compile("org.mariadb.jdbc:mariadb-java-client:2.0.2")
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
-compileJava {
-    options.compilerArgs << "-Xlint:unchecked"
-}
-
-compileTestJava {
-    options.compilerArgs << "-Xlint:unchecked"
-}
-
+def developmentDbUrl = "jdbc:mariadb://localhost:3306/tracker_dev?user=tracker"
 bootRun.environment([
-    "WELCOME_MESSAGE": "hello"
+        "WELCOME_MESSAGE": "hello",
+        "SPRING_DATASOURCE_URL": developmentDbUrl,
 ])
 
+def testDbUrl = "jdbc:mariadb://localhost:3306/tracker_test?user=tracker"
 test.environment([
-    "WELCOME_MESSAGE": "Hello from test"
+        "WELCOME_MESSAGE": "Hello from test",
+        "SPRING_DATASOURCE_URL": testDbUrl,
 ])
 
-task count << {
-    4.times {
-        print "$it "
-    }
+flyway {
+    url = developmentDbUrl
+    user = "tracker"
+    password = ""
+    locations = ["filesystem:databases/tracker/migrations"]
 }
 
-task groovyJDK << {
-    String name = "Marc";
-    name.each() {
-        println "${it}"
-    }
+task testMigrate(type: FlywayMigrateTask) {
+    url = testDbUrl
 }
